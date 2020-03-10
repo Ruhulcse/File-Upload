@@ -1,0 +1,19 @@
+.background{
+    background-color:#bbe6d6;
+    height: 300px;
+}
+.body{
+    background-color:#bbe6d6;
+    height: 1000px;
+}
+.button {
+    background-color: DodgerBlue;
+    border: none;
+    color: white;
+    padding: 12px 30px;
+    cursor: pointer;
+    font-size: 20px;
+  }
+  .button:hover {
+    background-color: RoyalBlue;
+  }  
