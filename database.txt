@@ -1,0 +1,120 @@
+//account table create
+CREATE TABLE  account(
+   id INT NOT NULL DEFAULT NEXTVAL('id_seq'),
+   name  CHAR(50) NOT NULL,
+   account_number  INT NOT NULL,
+   parent_account INT,
+  level INT,
+  PRIMARY KEY (account_number),
+  FOREIGN KEY (parent_account) REFERENCES account (account_number) 
+); 
+
+//insert data into table
+INSERT INTO account (name, account_number, parent_account, level)
+VALUES
+   ('J',20,12,1);
+
+// Find all root node or root account
+SELECT
+    name, account_number
+FROM
+    account
+WHERE
+    parent_account IS NULL;
+
+//Querying the whole tree
+
+	
+WITH RECURSIVE category_path (id, account_number, path) AS
+(
+  SELECT id, account_number, account_number as path
+    FROM account
+    WHERE parent_account IS NULL
+  UNION ALL
+  SELECT c.id, c.account_number, CONCAT(cp.path, c.account_number)
+    FROM category_path AS cp JOIN account AS c
+      ON cp.account_number = c.parent_account
+)
+SELECT * FROM category_path;
+
+
+
+with rec (parent_account, account_number) as (
+    select t.parent_account, t.account_number
+    from account t 
+    union all 
+    select rec.parent_account, t.account_number
+    from rec, account t 
+    where rec.ancestor_id = t.parent_account
+) select * from rec
+name= parent_account
+
+WITH RECURSIVE 
+    rec_d (account_number, name) AS
+    (
+      SELECT account.account_number, account.name FROM account WHERE name = 'E'
+      UNION ALL
+      SELECT account.account_number, account.name FROM rec_d, account where account.parent_account = rec_d.account_number
+    ),
+    rec_a (account_number, name, parent_account) AS
+    (
+      SELECT account.account_number, account.name, account.parent_account FROM account WHERE name = 'E'
+      UNION ALL
+      SELECT account.account_number, account.name, account.parent_account FROM rec_a, account WHERE account.account_number = rec_a.parent_account
+    )
+SELECT account_number, name FROM rec_a
+UNION 
+SELECT account_number, name FROM rec_d ;
+
+
+
+//Find parent account
+
+
+WITH RECURSIVE rec_a (account_number, parent_account) AS
+    (
+      SELECT account.account_number, account.parent_account FROM account WHERE account_number =10
+      UNION ALL
+      SELECT account.account_number, account.parent_account FROM rec_a, account WHERE account.account_number = rec_a.parent_account
+    )
+SELECT parent_account FROM rec_a ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
