@@ -103,3 +103,21 @@ UNION ALL
  WHERE c.parent_account = p.account_number
 )
 SELECT * FROM acc_users_cte AS n ORDER BY n.account_number ASC;
+
+
+// Only update user 
+UPDATE account
+ SET parent_account = 12
+ WHERE account_number = 20;
+
+
+
+//Delete an account
+
+DELETE FROM account WHERE account_number = 10;
+
+//After deleting all the parent node should be updated
+
+UPDATE account
+SET parent_account = NULL
+WHERE parent_account = 10;
