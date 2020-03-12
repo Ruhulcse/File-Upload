@@ -89,3 +89,17 @@ WITH RECURSIVE rec_a (account_number, parent_account) AS
       SELECT account.account_number, account.parent_account FROM rec_a, account WHERE account.parent_account = rec_a.account_number
     )
 SELECT account_number FROM rec_a ;
+
+//find path recursivly 
+
+WITH RECURSIVE acc_users_cte(account_number,parent_account, path) AS (
+ SELECT account.account_number, account.parent_account , account.account_number::TEXT AS path 
+ FROM account AS account
+ WHERE account.parent_account IS NULL
+UNION ALL
+ SELECT c.account_number,c.parent_account,  
+        (p.path || '/' || c.account_number::TEXT) 
+ FROM acc_users_cte AS p, account AS c 
+ WHERE c.parent_account = p.account_number
+)
+SELECT * FROM acc_users_cte AS n ORDER BY n.account_number ASC;
